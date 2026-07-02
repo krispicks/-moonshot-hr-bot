@@ -3,6 +3,7 @@ import discord
 
 def home_run_embed(
     player,
+    player_id,
     team,
     distance,
     exit_velocity,
@@ -17,14 +18,22 @@ def home_run_embed(
         color=discord.Color.red()
     )
 
+    # Official MLB player headshot
+    headshot = (
+        f"https://img.mlbstatic.com/mlb-photos/image/upload/"
+        f"w_213,q_auto:best/v1/people/{player_id}/headshot/67/current"
+    )
+
+    embed.set_thumbnail(url=headshot)
+
     embed.add_field(
-        name="Player",
+        name="👤 Player",
         value=player,
         inline=False
     )
 
     embed.add_field(
-        name="Team",
+        name="🏟️ Team",
         value=team,
         inline=False
     )
@@ -56,7 +65,7 @@ def home_run_embed(
     embed.add_field(
         name="⚾ Score",
         value=f"{away_score} - {home_score}",
-        inline=True
+        inline=False
     )
 
     embed.set_footer(text="DingerHQ • Live MLB Home Run Alerts")
