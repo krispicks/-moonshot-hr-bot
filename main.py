@@ -19,7 +19,7 @@ class Bot(discord.Client):
             if ch:
                 await ch.send("✅ DingerHQ bot is online!")
 
-        print("Starting HR watcher...")
+        print("🚨 THIS IS THE NEW MAIN.PY")
         await alerts.watch_home_runs(self, ch)
 
 
