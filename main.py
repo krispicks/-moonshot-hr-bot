@@ -18,15 +18,7 @@ class Bot(discord.Client):
             if ch:
                 await ch.send("✅ DingerHQ bot is online!")
 
-        while True:
-            try:
-                games = mlb.get_live_games()
-                print(games)
-            except Exception as e:
-                print(e)
-
-            await asyncio.sleep(15)
-
+        await alerts.watch_home_runs(self, ch)
 
 intents = discord.Intents.default()
 
