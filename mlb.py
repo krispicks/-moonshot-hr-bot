@@ -67,12 +67,13 @@ def get_home_run_events(game_pk):
         home_score = result.get("homeScore", 0)
 
         events.append({
-            "play_id": play["about"]["atBatIndex"],
-            "player_id": play["matchup"]["batter"]["id"],   # <-- Used for MLB headshot
-            "batter": play["matchup"]["batter"]["fullName"],
-            "team": team,
-            "inning": play["about"]["inning"],
-            "half": play["about"]["halfInning"],
+          "play_id": (
+    f"{play['matchup']['batter']['id']}_"
+    f"{play['about']['inning']}_"
+    f"{play['about']['halfInning']}_"
+    f"{result.get('awayScore', 0)}_"
+    f"{result.get('homeScore', 0)}"
+),
             "distance": hit.get("totalDistance", "N/A"),
             "exit_velocity": hit.get("launchSpeed", "N/A"),
             "launch_angle": hit.get("launchAngle", "N/A"),
