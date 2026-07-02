@@ -1,4 +1,5 @@
 import os
+import asyncio
 import discord
 import mlb
 
@@ -10,20 +11,19 @@ class Bot(discord.Client):
     async def on_ready(self):
         print(f"Logged in as {self.user}")
 
-        games = mlb.get_todays_games()
-        print("Connected to MLB API!")
-
-        dates = games.get("dates", [])
-
-        if dates:
-            print(f"Today's games: {len(dates[0]['games'])}")
-        else:
-            print("No games today.")
-
         if CHANNEL_ID:
             ch = self.get_channel(int(CHANNEL_ID))
             if ch:
-                await ch.send("✅ DingerHQ bot is online.")
+                await ch.send("✅ DingerHQ bot is online!")
+
+        while True:
+            try:
+                games = mlb.get_live_games()
+                print(games)
+            except Exception as e:
+                print(e)
+
+            await asyncio.sleep(15)
 
 
 intents = discord.Intents.default()
