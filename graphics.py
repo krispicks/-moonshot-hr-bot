@@ -18,7 +18,10 @@ def create_home_run_graphic(
     width = 1200
     height = 675
 
-    image = Image.new("RGB", (width, height), (20, 20, 25))
+    background = Image.open("assets/background.png").convert("RGB")
+background = background.resize((width, height))
+image = background.copy()
+
     draw = ImageDraw.Draw(image)
 
     try:
