@@ -67,16 +67,24 @@ def get_home_run_events(game_pk):
         home_score = result.get("homeScore", 0)
 
         events.append({
-          "play_id": (
-    f"{play['matchup']['batter']['id']}_"
-    f"{play['about']['inning']}_"
-    f"{play['about']['halfInning']}_"
-    f"{result.get('awayScore', 0)}_"
-    f"{result.get('homeScore', 0)}"
-),
+            "play_id": (
+                f"{play['matchup']['batter']['id']}_"
+                f"{play['about']['inning']}_"
+                f"{play['about']['halfInning']}_"
+                f"{result.get('awayScore', 0)}_"
+                f"{result.get('homeScore', 0)}"
+            ),
+
+            "player_id": play["matchup"]["batter"]["id"],
+            "batter": play["matchup"]["batter"]["fullName"],
+            "team": team,
+            "inning": play["about"]["inning"],
+            "half": play["about"]["halfInning"],
+
             "distance": hit.get("totalDistance", "N/A"),
             "exit_velocity": hit.get("launchSpeed", "N/A"),
             "launch_angle": hit.get("launchAngle", "N/A"),
+
             "away_score": away_score,
             "home_score": home_score,
         })
