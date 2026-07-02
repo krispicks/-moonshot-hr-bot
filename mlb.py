@@ -47,7 +47,7 @@ def get_home_run_events(game_pk):
             continue
 
         hit = play.get("hitData", {})
-
+print("HIT DATA:", hit, flush=True)
         if play["about"]["halfInning"].lower() == "top":
             team = (
                 feed.get("gameData", {})
