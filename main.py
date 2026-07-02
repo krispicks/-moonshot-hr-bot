@@ -6,6 +6,8 @@ import mlb
 TOKEN = os.getenv("DISCORD_TOKEN")
 CHANNEL_ID = os.getenv("CHANNEL_ID")
 
+posted_home_runs = set()
+
 
 class Bot(discord.Client):
     async def on_ready(self):
