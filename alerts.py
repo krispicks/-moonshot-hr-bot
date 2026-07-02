@@ -2,7 +2,8 @@ import asyncio
 import mlb
 import embeds
 import cache
-
+import discord
+import graphics
 
 async def watch_home_runs(bot, channel):
     print("watch_home_runs() started", flush=True)
@@ -46,7 +47,7 @@ async def watch_home_runs(bot, channel):
                         hr
                     )
 
-                    embed = embeds.home_run_embed(
+                         filename = graphics.create_home_run_graphic(
                         player=updated_hr["batter"],
                         player_id=updated_hr["player_id"],
                         team=updated_hr["team"],
@@ -59,7 +60,7 @@ async def watch_home_runs(bot, channel):
                         home_score=updated_hr["home_score"],
                     )
 
-                    await channel.send(embed=embed)
+                    await channel.send(file=discord.File(filename))
 
                     print(f"Posted: {game_pk}-{play_id}", flush=True)
 
