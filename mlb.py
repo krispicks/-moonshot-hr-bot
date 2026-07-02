@@ -30,3 +30,22 @@ def get_today_game_ids():
             game_ids.append(game["gamePk"])
 
     return game_ids
+    def get_home_run_events(game_pk):
+    """Return all home run events from a game."""
+    feed = get_game_feed(game_pk)
+
+    home_runs = []
+
+    plays = feed.get("liveData", {}).get("plays", {}).get("allPlays", [])
+
+    for play in plays:
+        result = play.get("result", {})
+
+        if result.get("event") == "Home Run":
+            home_runs.append({
+                "batter": result.get("description"),
+                "inning": play.get("about", {}).get("inning"),
+                "half": play.get("about", {}).get("halfInning"),
+            })
+
+    return home_runs
