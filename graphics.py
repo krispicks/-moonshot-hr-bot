@@ -2,6 +2,33 @@ from PIL import Image, ImageDraw, ImageFont
 import requests
 from io import BytesIO
 
+try:
+    from theme import TEAM_THEMES
+except Exception:
+    TEAM_THEMES = {}
+
+WIDTH = 1200
+HEIGHT = 675
+
+def _font(size, bold=False):
+    try:
+        name = "DejaVuSans-Bold.ttf" if bold else "DejaVuSans.ttf"
+        return ImageFont.truetype(name, size)
+    except Exception:
+        return ImageFont.load_default()
+
+def _headshot(player_id):
+    url = (
+        f"https://img.mlbstatic.com/mlb-photos/image/upload/"
+        f"w_300,q_auto:best/v1/people/{player_id}/headshot/67/current"
+    )
+    try:
+        r = requests.get(url, timeout=10)
+        r.raise_for_status()
+        img = Image.open(BytesIO(r.content)).convert("RGBA")
+        return img.resize((220,220))
+    except Exception:
+        return None
 
 def create_home_run_graphic(
     player,
@@ -15,55 +42,51 @@ def create_home_run_graphic(
     away_score,
     home_score,
 ):
-    width = 1200
-    height = 675
+    theme = TEAM_THEMES.get(team, TEAM_THEMES.get("default", {
+        "primary": (200,30,30),
+        "secondary": (255,255,255),
+        "text": (255,255,255),
+    }))
 
-        background = Image.open("assets/background.png").convert("RGB")
-    background = background.resize((width, height))
-    image = background.copy()
-
+    image = Image.new("RGB", (WIDTH, HEIGHT), (18,18,22))
     draw = ImageDraw.Draw(image)
 
-    try:
-        title_font = ImageFont.truetype("DejaVuSans-Bold.ttf", 58)
-        font = ImageFont.truetype("DejaVuSans.ttf", 34)
-    except:
-        title_font = ImageFont.load_default()
-        font = ImageFont.load_default()
+    # header
+    draw.rectangle((0,0,WIDTH,90), fill=theme["primary"])
 
-    draw.text((40, 30), "🚀 HOME RUN", fill="white", font=title_font)
+    title = _font(54, True)
+    big = _font(48, True)
+    normal = _font(34)
+    small = _font(28)
 
-    # Download player headshot
-    try:
-        url = f"https://img.mlbstatic.com/mlb-photos/image/upload/w_213,q_auto:best/v1/people/{player_id}/headshot/67/current"
+    draw.text((40,18), "ð DingerHQ LIVE", fill="white", font=title)
 
-        response = requests.get(url, timeout=10)
+    # headshot
+    hs = _headshot(player_id)
+    if hs:
+        image.paste(hs, (900,120), hs)
 
-        headshot = Image.open(BytesIO(response.content)).convert("RGB")
-        headshot = headshot.resize((170, 170))
-
-        image.paste(headshot, (980, 35))
-    except:
-        pass
+    draw.text((50,120), player.upper(), fill=theme["secondary"], font=big)
+    draw.text((50,180), team, fill="white", font=normal)
 
     stats = [
-        ("Player", player),
-        ("Team", team),
-        ("Distance", f"{distance} ft"),
-        ("Exit Velocity", f"{exit_velocity} MPH"),
-        ("Launch Angle", f"{launch_angle}°"),
-        ("Inning", f"{half} {inning}"),
-        ("Score", f"{away_score} - {home_score}")
+        ("ð Distance", f"{distance} ft"),
+        ("ð Exit Velocity", f"{exit_velocity} MPH"),
+        ("ð Launch Angle", f"{launch_angle}Â°"),
+        ("ð Inning", f"{half.title()} {inning}"),
+        ("â¾ Score", f"{away_score} - {home_score}")
     ]
 
-    y = 150
-
+    y = 270
     for label, value in stats:
-        draw.text((60, y), label, fill="white", font=font)
-        draw.text((320, y), str(value), fill=(255, 80, 80), font=font)
-        y += 60
+        draw.rounded_rectangle((40,y-8,760,y+42), radius=12,
+                               fill=(35,35,42))
+        draw.text((60,y), label, fill="white", font=small)
+        draw.text((390,y), str(value), fill=theme["secondary"], font=small)
+        y += 70
 
-    filename = "home_run.png"
-    image.save(filename)
+    draw.text((40,620), "Powered by DingerHQ", fill=(180,180,180), font=small)
 
-    return filename
+    out = "home_run.png"
+    image.save(out)
+    return out
