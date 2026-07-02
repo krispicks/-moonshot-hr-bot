@@ -25,10 +25,14 @@ async def watch_home_runs(bot, channel):
 
                     play_id = hr["play_id"]
 
+                    print(f"Checking game={game_pk}, play_id={play_id}", flush=True)
+
                     if cache.already_posted(game_pk, play_id):
+                        print("Already posted. Skipping.", flush=True)
                         continue
 
-                    # Wait a few seconds so Statcast data has time to appear
+                    print("New home run. Waiting for Statcast...", flush=True)
+
                     await asyncio.sleep(8)
 
                     updated_home_runs = mlb.get_home_run_events(game_pk)
@@ -54,6 +58,8 @@ async def watch_home_runs(bot, channel):
                     await channel.send(embed=embed)
 
                     cache.mark_posted(game_pk, play_id)
+
+                    print(f"Marked posted: {game_pk}-{play_id}", flush=True)
 
         except Exception as e:
             print(f"Error in watch_home_runs(): {e}", flush=True)
