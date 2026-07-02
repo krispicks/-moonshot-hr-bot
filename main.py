@@ -8,7 +8,7 @@ CHANNEL_ID = os.getenv("CHANNEL_ID")
 
 class Bot(discord.Client):
     async def on_ready(self):
-        print(f"Logged in as {self.user}")
+        print(f"Logged in as {self.user}", flush=True)
 
         ch = None
 
