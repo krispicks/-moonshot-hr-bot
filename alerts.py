@@ -4,15 +4,15 @@ import embeds
 import cache
 
 async def watch_home_runs(bot, channel):
-    print("watch_home_runs() started")
+   print("watch_home_runs() started", flush=True)
 
     while True:
-        print("Loop running")
+        print("Loop running", flush=True)
 
         try:
-            print("Getting today's games...")
+            print("Getting today's games...", flush=True)
             game_ids = mlb.get_today_game_ids()
-            print(f"Found {len(game_ids)} games: {game_ids}")
+            print(f"Found {len(game_ids)} games: {game_ids}", flush=True)
 
             for game_pk in game_ids:
                 home_runs = mlb.get_home_run_events(game_pk)
@@ -33,6 +33,6 @@ async def watch_home_runs(bot, channel):
                     await channel.send(embed=embed)
 
         except Exception as e:
-            print(f"Error: {e}")
+            print(f"Error: {e}", flush=True)
 
         await asyncio.sleep(15)
