@@ -2,7 +2,7 @@ import os
 import asyncio
 import discord
 import mlb
-
+import alerts
 TOKEN = os.getenv("DISCORD_TOKEN")
 CHANNEL_ID = os.getenv("CHANNEL_ID")
 
