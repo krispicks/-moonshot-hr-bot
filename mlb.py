@@ -14,12 +14,16 @@ def get_game_feed(game_pk):
 
 
 def get_today_game_ids():
-    games = get_live_games()
+    url = "https://statsapi.mlb.com/api/v1/schedule?sportId=1"
+
+    response = requests.get(url, timeout=10)
+    data = response.json()
 
     game_ids = []
 
-    for game in games.get("games", []):
-        game_ids.append(game["gamePk"])
+    for date in data.get("dates", []):
+        for game in date.get("games", []):
+            game_ids.append(game["gamePk"])
 
     return game_ids
 
