@@ -3,6 +3,7 @@ import mlb
 import embeds
 import cache
 
+
 async def watch_home_runs(bot, channel):
     print("watch_home_runs() started", flush=True)
 
@@ -16,7 +17,8 @@ async def watch_home_runs(bot, channel):
 
             for game_pk in game_ids:
                 home_runs = mlb.get_home_run_events(game_pk)
-print(f"Game {game_pk}: {len(home_runs)} home runs found", flush=True)
+                print(f"Game {game_pk}: {len(home_runs)} home runs found", flush=True)
+
                 for hr in home_runs:
                     play_id = f"{hr['batter']}-{hr['inning']}-{hr['half']}"
 
