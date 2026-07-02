@@ -33,23 +33,52 @@ def get_home_run_events(game_pk):
 
     events = []
 
-    all_plays = feed.get("liveData", {}).get("plays", {}).get("allPlays", [])
+    all_plays = (
+        feed.get("liveData", {})
+        .get("plays", {})
+        .get("allPlays", [])
+    )
 
     for play in all_plays:
+
         result = play.get("result", {})
 
-        if result.get("event") == "Home Run":
+        if result.get("event") != "Home Run":
+            continue
 
-            import json
-            print("=" * 60)
-            print("HOME RUN FOUND")
-            print(json.dumps(play, indent=2))
-            print("=" * 60)
+        hit = play.get("hitData", {})
 
-            events.append({
-                "batter": play["matchup"]["batter"]["fullName"],
-                "inning": play["about"]["inning"],
-                "half": play["about"]["halfInning"]
-            })
+        # Figure out which team is batting
+        if play["about"]["halfInning"].lower() == "top":
+            team = (
+                feed.get("gameData", {})
+                .get("teams", {})
+                .get("away", {})
+                .get("name", "Unknown")
+            )
+        else:
+            team = (
+                feed.get("gameData", {})
+                .get("teams", {})
+                .get("home", {})
+                .get("name", "Unknown")
+            )
+
+        # Current score
+        away_score = play.get("result", {}).get("awayScore", 0)
+        home_score = play.get("result", {}).get("homeScore", 0)
+
+        events.append({
+            "play_id": play["about"]["atBatIndex"],
+            "batter": play["matchup"]["batter"]["fullName"],
+            "team": team,
+            "inning": play["about"]["inning"],
+            "half": play["about"]["halfInning"],
+            "distance": hit.get("totalDistance", "N/A"),
+            "exit_velocity": hit.get("launchSpeed", "N/A"),
+            "launch_angle": hit.get("launchAngle", "N/A"),
+            "away_score": away_score,
+            "home_score": home_score,
+        })
 
     return events
