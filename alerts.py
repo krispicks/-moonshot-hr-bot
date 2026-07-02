@@ -8,8 +8,11 @@ async def watch_home_runs(bot, channel):
 
     while True:
         print("Loop running")
+
         try:
+            print("Getting today's games...")
             game_ids = mlb.get_today_game_ids()
+            print(f"Found {len(game_ids)} games: {game_ids}")
 
             for game_pk in game_ids:
                 home_runs = mlb.get_home_run_events(game_pk)
