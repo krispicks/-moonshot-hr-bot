@@ -12,38 +12,40 @@ async def watch_home_runs(bot, channel):
             print("Getting today's games...", flush=True)
             game_ids = mlb.get_today_game_ids()
 
+            print(f"Found {len(game_ids)} games")
+
             for game_pk in game_ids:
+
                 home_runs = mlb.get_home_run_events(game_pk)
 
-                print(f"Game {game_pk}: {len(home_runs)} home runs found", flush=True)
+                print(f"Game {game_pk}: {len(home_runs)} home runs found")
 
                 for hr in home_runs:
 
-                    # Use MLB play_id if available, otherwise fall back
-                    play_id = str(
-                        hr.get(
-                            "play_id",
-                            f"{hr['batter']}-{hr['inning']}-{hr['half']}"
-                        )
-                    )
+                    play_id = hr["play_id"]
 
-                    # Skip if already posted
+                    # Skip if we've already posted this HR
                     if cache.already_posted(game_pk, play_id):
                         continue
 
                     embed = embeds.home_run_embed(
-                        player=hr.get("batter", "Unknown"),
-                        team=hr.get("team", "Unknown"),
-                        distance=hr.get("distance", "N/A"),
-                        exit_velocity=hr.get("exit_velocity", "N/A"),
+                        player=hr["batter"],
+                        team=hr["team"],
+                        distance=hr["distance"],
+                        exit_velocity=hr["exit_velocity"],
+                        launch_angle=hr["launch_angle"],
+                        inning=hr["inning"],
+                        half=hr["half"],
+                        away_score=hr["away_score"],
+                        home_score=hr["home_score"],
                     )
 
                     await channel.send(embed=embed)
 
-                    # Mark as posted so it isn't sent again
+                    # Remember we've posted it
                     cache.mark_posted(game_pk, play_id)
 
         except Exception as e:
-            print(f"Error: {e}", flush=True)
+            print(f"Error in watch_home_runs(): {e}", flush=True)
 
         await asyncio.sleep(15)
