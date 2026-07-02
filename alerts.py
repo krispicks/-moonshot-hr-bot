@@ -4,9 +4,10 @@ import embeds
 import cache
 
 async def watch_home_runs(bot, channel):
-    print("Watching for home runs...")
+    print("watch_home_runs() started")
 
     while True:
+        print("Loop running")
         try:
             game_ids = mlb.get_today_game_ids()
 
