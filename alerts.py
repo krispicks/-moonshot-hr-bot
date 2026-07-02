@@ -4,7 +4,7 @@ import embeds
 import cache
 
 async def watch_home_runs(bot, channel):
-   print("watch_home_runs() started", flush=True)
+    print("watch_home_runs() started", flush=True)
 
     while True:
         print("Loop running", flush=True)
