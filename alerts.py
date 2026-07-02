@@ -24,7 +24,7 @@ async def watch_home_runs(bot, channel):
                 for hr in home_runs:
 
                     play_id = hr["play_id"]
-
+print(f"DEBUG play_id={play_id}, player={hr['batter']}", flush=True)
                     print(f"Checking game={game_pk}, play_id={play_id}", flush=True)
 
                     if cache.already_posted(game_pk, play_id):
