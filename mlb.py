@@ -48,7 +48,6 @@ def get_home_run_events(game_pk):
 
         hit = play.get("hitData", {})
 
-        # Figure out which team is batting
         if play["about"]["halfInning"].lower() == "top":
             team = (
                 feed.get("gameData", {})
@@ -64,12 +63,12 @@ def get_home_run_events(game_pk):
                 .get("name", "Unknown")
             )
 
-        # Current score
-        away_score = play.get("result", {}).get("awayScore", 0)
-        home_score = play.get("result", {}).get("homeScore", 0)
+        away_score = result.get("awayScore", 0)
+        home_score = result.get("homeScore", 0)
 
         events.append({
             "play_id": play["about"]["atBatIndex"],
+            "player_id": play["matchup"]["batter"]["id"],   # <-- Used for MLB headshot
             "batter": play["matchup"]["batter"]["fullName"],
             "team": team,
             "inning": play["about"]["inning"],
