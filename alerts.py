@@ -38,14 +38,29 @@ async def watch_home_runs(bot, channel):
 
                     print("New home run. Waiting for Statcast...", flush=True)
 
-                    await asyncio.sleep(8)
+                    updated_hr = hr
 
-                    updated_home_runs = mlb.get_home_run_events(game_pk)
+                    # Wait up to 30 seconds for Statcast data
+                    for _ in range(6):
+                        await asyncio.sleep(5)
 
-                    updated_hr = next(
-                        (x for x in updated_home_runs if x["play_id"] == play_id),
-                        hr
-                    )
+                        updated_home_runs = mlb.get_home_run_events(game_pk)
+
+                        found = next(
+                            (x for x in updated_home_runs if x["play_id"] == play_id),
+                            None,
+                        )
+
+                        if found:
+                            updated_hr = found
+
+                            if (
+                                updated_hr["distance"] != "N/A"
+                                and updated_hr["exit_velocity"] != "N/A"
+                                and updated_hr["launch_angle"] != "N/A"
+                            ):
+                                print("Statcast data found!", flush=True)
+                                break
 
                     filename = graphics.create_home_run_graphic(
                         player=updated_hr["batter"],
