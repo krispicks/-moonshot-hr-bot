@@ -32,6 +32,9 @@ async def watch_home_runs(bot, channel):
                         print("Already posted. Skipping.", flush=True)
                         continue
 
+                    # Mark immediately to stop duplicate posts
+                    cache.mark_posted(game_pk, play_id)
+
                     print("New home run. Waiting for Statcast...", flush=True)
 
                     await asyncio.sleep(8)
@@ -58,9 +61,7 @@ async def watch_home_runs(bot, channel):
 
                     await channel.send(embed=embed)
 
-                    cache.mark_posted(game_pk, play_id)
-
-                    print(f"Marked posted: {game_pk}-{play_id}", flush=True)
+                    print(f"Posted: {game_pk}-{play_id}", flush=True)
 
         except Exception as e:
             print(f"Error in watch_home_runs(): {e}", flush=True)
