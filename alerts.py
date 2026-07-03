@@ -4,8 +4,11 @@ import cache
 import discord
 import graphics
 
+startup_complete = False
 
 async def watch_home_runs(bot, channel):
+    global startup_complete
+
     print("watch_home_runs() started", flush=True)
 
     while True:
@@ -26,21 +29,28 @@ async def watch_home_runs(bot, channel):
 
                     play_id = hr["play_id"]
 
-                    print(f"DEBUG play_id={play_id}, player={hr['batter']}", flush=True)
-                    print(f"Checking game={game_pk}, play_id={play_id}", flush=True)
-
+                    # Skip anything we've already seen
                     if cache.already_posted(game_pk, play_id):
-                        print("Already posted. Skipping.", flush=True)
                         continue
 
-                    # Mark immediately to stop duplicate posts
+                    # -----------------------------
+                    # STARTUP SYNC
+                    # -----------------------------
+                    if not startup_complete:
+                        cache.mark_posted(game_pk, play_id)
+                        print(
+                            f"Startup sync: ignoring old HR {game_pk}-{play_id}",
+                            flush=True,
+                        )
+                        continue
+                    # -----------------------------
+
                     cache.mark_posted(game_pk, play_id)
 
                     print("New home run. Waiting for Statcast...", flush=True)
 
                     updated_hr = hr
 
-                    # Wait up to 30 seconds for Statcast data
                     for _ in range(6):
                         await asyncio.sleep(5)
 
@@ -79,6 +89,10 @@ async def watch_home_runs(bot, channel):
 
                     print(f"Posted: {game_pk}-{play_id}", flush=True)
 
+            # Startup scan finished
+            if not startup_complete and game_ids:
+                startup_complete = True
+                print("✅ Startup sync complete. Watching for NEW home runs only.", flush=True)
         except Exception as e:
             print(f"Error in watch_home_runs(): {e}", flush=True)
 
