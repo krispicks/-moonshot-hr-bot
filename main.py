@@ -33,7 +33,6 @@ class Bot(discord.Client):
             return
         
         print(f"Received message: {message.content}", flush=True)
-      
           # Test command
         if message.content.lower() == "!testhr":
 
