@@ -150,9 +150,8 @@ def create_home_run_graphic(
     normal = _font(34)
     small = _font(28)
 
-    draw.text((35, 10), "🚀 HOME RUN", fill=theme["secondary"], font=title)
-    draw.text((40, 78), "DingerHQ LIVE", fill=(220, 220, 220), font=small)
-
+    draw.text((35, 8), "🚀 HOME RUN ALERT", fill=theme["secondary"], font=title)
+    draw.text((40, 76), "POWERED BY DINGERHQ", fill=(185,185,185), font=small)
     # Player headshot
     hs = _headshot(player_id)
 
