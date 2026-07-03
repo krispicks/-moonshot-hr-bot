@@ -52,7 +52,8 @@ def create_home_run_graphic(
     draw = ImageDraw.Draw(image)
 
     # header
-    draw.rectangle((0,0,WIDTH,90), fill=theme["primary"])
+    draw.rectangle((0,0,WIDTH,95), fill=(15,15,15))
+    draw.line((0,95,WIDTH,95), fill=(255,215,0), width=4)
 
     title = _font(54, True)
     big = _font(62, True)
@@ -71,12 +72,12 @@ def create_home_run_graphic(
     draw.text((50,180), team, fill="white", font=normal)
 
     stats = [
-        ("ð Distance", f"{distance} ft"),
-        ("ð Exit Velocity", f"{exit_velocity} MPH"),
-        ("ð Launch Angle", f"{launch_angle}Â°"),
-        ("ð Inning", f"{half.title()} {inning}"),
-        ("â¾ Score", f"{away_score} - {home_score}")
-    ]
+    ("DISTANCE", f"{distance} ft"),
+    ("EXIT VELOCITY", f"{exit_velocity} MPH"),
+    ("LAUNCH ANGLE", f"{launch_angle}°"),
+    ("INNING", f"{half.title()} {inning}"),
+    ("SCORE", f"{away_score} - {home_score}")
+]
 
     y = 270
     for label, value in stats:
@@ -87,7 +88,7 @@ def create_home_run_graphic(
     outline=theme["secondary"],
     width=2
 )
-                               fill=(35,35,42))
+        
         draw.text((60,y), label, fill="white", font=small)
         draw.text((390,y), str(value), fill=theme["secondary"], font=small)
         y += 70
