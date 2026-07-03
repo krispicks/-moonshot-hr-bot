@@ -172,7 +172,7 @@ def create_home_run_graphic(
     team_font = _font(34)
 
     draw.text(
-         (540, 185),   # moved right
+         (430, 180),   # moved right
          player.upper(),
          fill=theme["secondary"],
          font=name_font,
@@ -180,7 +180,7 @@ def create_home_run_graphic(
     )
 
     draw.text(
-        (540, 240),   # moved right
+        (430, 235),   # moved right
         team,
         fill="white",
         font=team_font,
