@@ -186,30 +186,51 @@ def create_home_run_graphic(
         anchor="mm",
     )
 
-    stats = [
-        ("DISTANCE", f"{distance} ft"),
-        ("EXIT VELOCITY", f"{exit_velocity} MPH"),
-        ("LAUNCH ANGLE", f"{launch_angle}°"),
-        ("INNING", f"{half.title()} {inning}"),
-        ("SCORE", f"{away_score} - {home_score}"),
+    cards = [
+        ("DISTANCE", f"{distance} FT", 40, 250),
+        ("EXIT VELO", f"{exit_velocity} MPH", 330, 250),
+        ("LAUNCH", f"{launch_angle}°", 40, 390),
+        ("INNING", f"{half.upper()} {inning}", 330, 390),
     ]
 
-    y = 280
-
-    for label, value in stats:
+    for title, value, x, y in cards:
 
         draw.rounded_rectangle(
-            (35, y - 10, 780, y + 52),
-            radius=18,
-            fill=(25, 25, 30, 220),
+            (x, y, x + 250, y + 110),
+            radius=22,
+            fill=(22, 22, 28),
             outline=theme["primary"],
-            width=2,
+            width=3,
         )
 
-        draw.text((60, y), label, fill="white", font=small)
-        draw.text((420, y), str(value), fill=(80, 255, 120), font=small)
+        draw.text(
+            (x + 20, y + 18),
+            title,
+            fill=(160, 160, 160),
+            font=_font(22, True),
+        )
 
-        y += 72
+        draw.text(
+            (x + 20, y + 56),
+            value,
+            fill="white",
+            font=_font(36, True),
+        )
+
+    draw.rounded_rectangle(
+        (40, 535, 540, 610),
+        radius=18,
+        fill=(20, 20, 25),
+        outline=theme["primary"],
+        width=3,
+    )
+
+    draw.text(
+        (60, 555),
+        f"{away_score}   •   {half.upper()} {inning}   •   {home_score}",
+        fill="white",
+        font=_font(32, True),
+    )
 
     draw.text(
         (40, 630),
