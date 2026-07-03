@@ -27,11 +27,22 @@ def _stadium_background():
 
 def _font(size, bold=False):
     try:
-        name = "DejaVuSans-Bold.ttf" if bold else "DejaVuSans.ttf"
-        return ImageFont.truetype(name, size)
+        if bold:
+            return ImageFont.truetype(
+                "assets/assets/fonts/BebasNeue-Regular.ttf",
+                size
+            )
+        else:
+            return ImageFont.truetype(
+                "assets/assets/fonts/BebasNeue-Regular.ttf",
+                size
+            )
     except Exception:
-        return ImageFont.load_default()
-
+        try:
+            name = "DejaVuSans-Bold.ttf" if bold else "DejaVuSans.ttf"
+            return ImageFont.truetype(name, size)
+        except Exception:
+            return ImageFont.load_default()
 
 def _headshot(player_id):
     url = (
