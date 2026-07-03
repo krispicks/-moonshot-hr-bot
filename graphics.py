@@ -9,14 +9,19 @@ except Exception:
 
 WIDTH = 1200
 HEIGHT = 675
-def _stadium_background():
-    path = "assets/stadiums/IMG_5978.jpeg"
 
-    if os.path.exists(path):
-        bg = Image.open(path).convert("RGB")
-        bg = bg.resize((WIDTH, HEIGHT))
-        bg = bg.filter(ImageFilter.GaussianBlur(8))
-        return bg
+def _stadium_background():
+    stadium_dir = "assets/stadiums"
+
+    if os.path.isdir(stadium_dir):
+        for filename in os.listdir(stadium_dir):
+            if filename.lower().endswith((".jpg", ".jpeg", ".png")):
+                path = os.path.join(stadium_dir, filename)
+
+                bg = Image.open(path).convert("RGB")
+                bg = bg.resize((WIDTH, HEIGHT))
+                bg = bg.filter(ImageFilter.GaussianBlur(8))
+                return bg
 
     return Image.new("RGB", (WIDTH, HEIGHT), (18, 18, 22))
 
@@ -69,7 +74,7 @@ def create_home_run_graphic(
 
     image = _stadium_background()
 
-    overlay = Image.new("RGBA", (WIDTH, HEIGHT), (0, 0, 0, 120))
+    overlay = Image.new("RGBA", (WIDTH, HEIGHT), (0, 0, 0, 140))
     image = Image.alpha_composite(
         image.convert("RGBA"),
         overlay
@@ -78,16 +83,16 @@ def create_home_run_graphic(
     draw = ImageDraw.Draw(image)
 
     # Header
-    draw.rectangle((0, 0, WIDTH, 95), fill=(15, 15, 15))
-    draw.line((0, 95, WIDTH, 95), fill=(255, 215, 0), width=4)
+    draw.rectangle((0, 0, WIDTH, 110), fill=(12, 12, 12))
+    draw.line((0, 110, WIDTH, 110), fill=theme["primary"], width=5)
 
-    title = _font(54, True)
+    title = _font(68, True)
     big = _font(62, True)
     normal = _font(34)
     small = _font(28)
 
-    draw.text((40, 15), "HOME RUN", fill=(255, 215, 0), font=title)
-    draw.text((40, 70), "DingerHQ LIVE", fill=(220, 220, 220), font=small)
+    draw.text((35, 10), "🚀 HOME RUN", fill=theme["secondary"], font=title)
+    draw.text((40, 78), "DingerHQ LIVE", fill=(220, 220, 220), font=small)
 
     # Player headshot
     hs = _headshot(player_id)
@@ -114,19 +119,19 @@ def create_home_run_graphic(
         draw.rounded_rectangle(
             (35, y - 10, 780, y + 52),
             radius=18,
-            fill=(32, 32, 38),
+            fill=(25, 25, 30, 220),
             outline=theme["primary"],
             width=2,
         )
 
         draw.text((60, y), label, fill="white", font=small)
-        draw.text((420, y), str(value), fill=theme["secondary"], font=small)
+        draw.text((420, y), str(value), fill=(80, 255, 120), font=small)
 
         y += 72
 
     draw.text(
         (40, 630),
-        "Powered by DingerHQ",
+        "⚾ Powered by DingerHQ",
         fill=(170, 170, 170),
         font=small,
     )
