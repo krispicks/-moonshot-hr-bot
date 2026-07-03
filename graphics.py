@@ -176,7 +176,7 @@ def create_home_run_graphic(
          player.upper(),
          fill=theme["secondary"],
          font=name_font,
-         anchor="mm",
+         anchor="lm",
     )
 
     draw.text(
@@ -184,7 +184,7 @@ def create_home_run_graphic(
         team,
         fill="white",
         font=team_font,
-        anchor="mm",
+        anchor="lm",
     )
 
     cards = [
