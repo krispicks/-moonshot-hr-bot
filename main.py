@@ -52,7 +52,7 @@ class Bot(discord.Client):
                 home_score=2,
             )
 
-            await message.channel.send(file=discord.File(filename))
+            await message.channel.send("TEST")
 
 
 intents = discord.Intents.default()
