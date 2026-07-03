@@ -44,9 +44,46 @@ def _font(size, bold=False):
         except Exception:
             return ImageFont.load_default()
 
+TEAM_LOGOS = {
+    "Arizona Diamondbacks": "ARI",
+    "Atlanta Braves": "ATL",
+    "Athletics": "ATH",
+    "Baltimore Orioles": "BAL",
+    "Boston Red Sox": "BOS",
+    "Chicago Cubs": "CHC",
+    "Chicago White Sox": "CWS",
+    "Cincinnati Reds": "CIN",
+    "Cleveland Guardians": "CLE",
+    "Colorado Rockies": "COL",
+    "Detroit Tigers": "DET",
+    "Houston Astros": "HOU",
+    "Kansas City Royals": "KC",
+    "Los Angeles Angels": "LAA",
+    "Los Angeles Dodgers": "LAD",
+    "Miami Marlins": "MIA",
+    "Milwaukee Brewers": "MIL",
+    "Minnesota Twins": "MIN",
+    "New York Mets": "NYM",
+    "New York Yankees": "NYY",
+    "Philadelphia Phillies": "PHI",
+    "Pittsburgh Pirates": "PIT",
+    "San Diego Padres": "SD",
+    "San Francisco Giants": "SF",
+    "Seattle Mariners": "SEA",
+    "St. Louis Cardinals": "STL",
+    "Tampa Bay Rays": "TB",
+    "Texas Rangers": "TEX",
+    "Toronto Blue Jays": "TOR",
+    "Washington Nationals": "WSH",
+}
+
 def _team_logo(team):
-    filename = team.replace(" ", "_") + ".png"
-    path = os.path.join("assets", "logos", filename)
+    abbr = TEAM_LOGOS.get(team)
+
+    if not abbr:
+        return None
+
+    path = os.path.join("assets", "logos", f"{abbr}.png")
 
     try:
         logo = Image.open(path).convert("RGBA")
