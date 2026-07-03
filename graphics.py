@@ -157,21 +157,23 @@ def create_home_run_graphic(
     hs = _headshot(player_id)
 
     if hs:
-        hs = hs.resize((520, 520))
-        image.paste(hs, (630, 90), hs)
+        hs = hs.resize((350, 350))
+        image.paste(hs, (40, 120), hs)
 
     # Team logo
     logo = _team_logo(team)
 
     if logo:
-        image.paste(logo, (315, 205), logo)
+        logo = logo.resize((180,180))
+        logo.putalpha(55)
+        image.paste(logo, (960, 20), logo)
 
     # Player info
     name_font = _font(72, True)
     team_font = _font(34)
 
     draw.text(
-        (300, 110),
+        (470, 145),
         player.upper(),
         fill=theme["secondary"],
         font=name_font,
@@ -179,7 +181,7 @@ def create_home_run_graphic(
     )
 
     draw.text(
-        (300, 170),
+        (470, 205),
         team,
         fill="white",
         font=team_font,
@@ -187,10 +189,10 @@ def create_home_run_graphic(
     )
 
     cards = [
-        ("DISTANCE", f"{distance} FT", 40, 250),
-        ("EXIT VELO", f"{exit_velocity} MPH", 330, 250),
-        ("LAUNCH", f"{launch_angle}°", 40, 390),
-        ("INNING", f"{half.upper()} {inning}", 330, 390),
+        ("DISTANCE", f"{distance} FT", 420, 290),
+        ("EXIT VELO", f"{exit_velocity} MPH", 700, 290),
+        ("LAUNCH", f"{launch_angle}°", 420, 430),
+        ("INNING", f"{half.upper()} {inning}", 700, 430),
     ]
 
     for title, value, x, y in cards:
@@ -218,7 +220,7 @@ def create_home_run_graphic(
         )
 
     draw.rounded_rectangle(
-        (40, 535, 540, 610),
+        (420, 565, 1110, 635),
         radius=18,
         fill=(20, 20, 25),
         outline=theme["primary"],
@@ -226,7 +228,7 @@ def create_home_run_graphic(
     )
 
     draw.text(
-        (60, 555),
+        (450, 582),
         f"{away_score}   •   {half.upper()} {inning}   •   {home_score}",
         fill="white",
         font=_font(32, True),
