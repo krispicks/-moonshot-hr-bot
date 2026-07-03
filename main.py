@@ -31,8 +31,10 @@ class Bot(discord.Client):
         # Ignore messages from the bot itself
         if message.author == self.user:
             return
-
-        # Test command
+        
+        print(f"Received message: {message.content}", flush=True)
+      
+          # Test command
         if message.content.lower() == "!testhr":
 
             filename = graphics.create_home_run_graphic(
