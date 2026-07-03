@@ -1,21 +1,38 @@
-async def on_ready(self):
-    print(f"Logged in as {self.user}", flush=True)
+import os
+import discord
+import alerts
 
-    ch = None
+TOKEN = os.getenv("DISCORD_TOKEN")
+CHANNEL_ID = os.getenv("CHANNEL_ID")
 
-    if CHANNEL_ID:
-        try:
-            ch = await self.fetch_channel(int(CHANNEL_ID))
-            print(f"Channel: {ch}", flush=True)
 
-            await ch.send("✅ DingerHQ bot is online!")
+class Bot(discord.Client):
 
-        except Exception as e:
-            print(f"Failed to fetch channel: {e}", flush=True)
+    async def on_ready(self):
+        print(f"Logged in as {self.user}", flush=True)
 
-    print("🚨 THIS IS THE NEW MAIN.PY", flush=True)
+        ch = None
 
-    if ch:
-        await alerts.watch_home_runs(self, ch)
-    else:
-        print("No valid channel found.", flush=True)
+        if CHANNEL_ID:
+            try:
+                ch = await self.fetch_channel(int(CHANNEL_ID))
+                print(f"Channel: {ch}", flush=True)
+
+                await ch.send("✅ DingerHQ bot is online!")
+
+            except Exception as e:
+                print(f"Failed to fetch channel: {e}", flush=True)
+
+        print("🚨 THIS IS THE NEW MAIN.PY", flush=True)
+
+        if ch:
+            await alerts.watch_home_runs(self, ch)
+        else:
+            print("No valid channel found.", flush=True)
+
+
+intents = discord.Intents.default()
+
+client = Bot(intents=intents)
+
+client.run(TOKEN)
