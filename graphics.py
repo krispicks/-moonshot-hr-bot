@@ -1,7 +1,7 @@
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont, ImageFilter
 import requests
 from io import BytesIO
-
+import os
 try:
     from theme import TEAM_THEMES
 except Exception:
@@ -9,7 +9,16 @@ except Exception:
 
 WIDTH = 1200
 HEIGHT = 675
+def _stadium_background():
+    path = "assets/stadiums/IMG_5978.jpeg"
 
+    if os.path.exists(path):
+        bg = Image.open(path).convert("RGB")
+        bg = bg.resize((WIDTH, HEIGHT))
+        bg = bg.filter(ImageFilter.GaussianBlur(8))
+        return bg
+
+    return Image.new("RGB", (WIDTH, HEIGHT), (18, 18, 22))
 
 def _font(size, bold=False):
     try:
@@ -30,7 +39,7 @@ def _headshot(player_id):
         r.raise_for_status()
 
         img = Image.open(BytesIO(r.content)).convert("RGBA")
-        return img.resize((320, 320))
+        return img.resize((420, 420))
 
     except Exception:
         return None
@@ -58,7 +67,14 @@ def create_home_run_graphic(
         },
     )
 
-    image = Image.new("RGB", (WIDTH, HEIGHT), (18, 18, 22))
+    image = _stadium_background()
+
+    overlay = Image.new("RGBA", (WIDTH, HEIGHT), (0, 0, 0, 120))
+    image = Image.alpha_composite(
+        image.convert("RGBA"),
+        overlay
+    ).convert("RGB")
+
     draw = ImageDraw.Draw(image)
 
     # Header
@@ -77,7 +93,7 @@ def create_home_run_graphic(
     hs = _headshot(player_id)
 
     if hs:
-        image.paste(hs, (820, 140), hs)
+        image.paste(hs, (740, 115), hs)
 
     # Player info
     draw.text((50, 120), player.upper(), fill=theme["secondary"], font=big)
@@ -99,7 +115,7 @@ def create_home_run_graphic(
             (35, y - 10, 780, y + 52),
             radius=18,
             fill=(32, 32, 38),
-            outline=(255, 215, 0),
+            outline=theme["primary"],
             width=2,
         )
 
