@@ -23,7 +23,7 @@ class Bot(discord.Client):
             except Exception as e:
                 print(f"Failed to fetch channel: {e}", flush=True)
 
-        print("🚨 THIS IS THE NEW MAIN.PY", flush=True)
+        
 
         if ch:
             await alerts.watch_home_runs(self, ch)
