@@ -8,6 +8,7 @@ CHANNEL_ID = os.getenv("CHANNEL_ID")
 
 
 class Bot(discord.Client):
+    watch_started = False
 
     async def on_ready(self):
         print(f"Logged in as {self.user}", flush=True)
@@ -22,8 +23,9 @@ class Bot(discord.Client):
             except Exception as e:
                 print(f"Failed to fetch channel: {e}", flush=True)
 
-        if ch:
-            await alerts.watch_home_runs(self, ch)
+        if ch and not self.watch_started:
+            self.watch_started = True
+            self.loop.create_task(alerts.watch_home_runs(self, ch))
         else:
             print("No valid channel found.", flush=True)
 
@@ -31,9 +33,10 @@ class Bot(discord.Client):
         # Ignore messages from the bot itself
         if message.author == self.user:
             return
-        
+
         print(f"Received message: {message.content}", flush=True)
-          # Test command
+
+        # Test command
         if message.content.lower() == "!testhr":
 
             filename = graphics.create_home_run_graphic(
