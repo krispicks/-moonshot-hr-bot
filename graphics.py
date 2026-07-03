@@ -87,7 +87,7 @@ def _team_logo(team):
 
     try:
         logo = Image.open(path).convert("RGBA")
-        return logo.resize((220, 220))
+        return logo.resize((110, 110))
     except Exception:
         return None
         
@@ -157,17 +157,34 @@ def create_home_run_graphic(
     hs = _headshot(player_id)
 
     if hs:
-        image.paste(hs, (740, 115), hs)
+        hs = hs.resize((520, 520))
+        image.paste(hs, (630, 90), hs)
 
     # Team logo
     logo = _team_logo(team)
 
     if logo:
-        image.paste(logo, (885, 330), logo)
+        image.paste(logo, (315, 205), logo)
 
     # Player info
-    draw.text((50, 120), player.upper(), fill=theme["secondary"], font=big)
-    draw.text((50, 190), team, fill="white", font=normal)
+    name_font = _font(72, True)
+    team_font = _font(34)
+
+    draw.text(
+        (300, 110),
+        player.upper(),
+        fill=theme["secondary"],
+        font=name_font,
+        anchor="mm",
+    )
+
+    draw.text(
+        (300, 170),
+        team,
+        fill="white",
+        font=team_font,
+        anchor="mm",
+    )
 
     stats = [
         ("DISTANCE", f"{distance} ft"),
