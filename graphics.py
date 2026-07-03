@@ -44,6 +44,17 @@ def _font(size, bold=False):
         except Exception:
             return ImageFont.load_default()
 
+def _team_logo(team):
+    filename = team.replace(" ", "_") + ".png"
+    path = os.path.join("assets", "logos", filename)
+
+    try:
+        logo = Image.open(path).convert("RGBA")
+        return logo.resize((220, 220))
+    except Exception:
+        return None
+        
+
 def _headshot(player_id):
     url = (
         f"https://img.mlbstatic.com/mlb-photos/image/upload/"
@@ -110,6 +121,12 @@ def create_home_run_graphic(
 
     if hs:
         image.paste(hs, (740, 115), hs)
+
+    # Team logo
+    logo = _team_logo(team)
+
+    if logo:
+        image.paste(logo, (885, 330), logo)
 
     # Player info
     draw.text((50, 120), player.upper(), fill=theme["secondary"], font=big)
