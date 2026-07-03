@@ -76,22 +76,24 @@ def create_home_run_graphic(
     ("EXIT VELOCITY", f"{exit_velocity} MPH"),
     ("LAUNCH ANGLE", f"{launch_angle}°"),
     ("INNING", f"{half.title()} {inning}"),
-    ("SCORE", f"{away_score} - {home_score}")
+    ("SCORE", f"{away_score} - {home_score}"),
 ]
 
-    y = 270
-    for label, value in stats:
-        draw.rounded_rectangle(
-    (35, y-10, 780, y+52),
-    radius=18,
-    fill=(32,32,38),
-    outline=theme["secondary"],
-    width=2
-)
-        
-        draw.text((60,y), label, fill="white", font=small)
-        draw.text((390,y), str(value), fill=theme["secondary"], font=small)
-        y += 70
+y = 270
+
+for label, value in stats:
+    draw.rounded_rectangle(
+        (35, y - 10, 780, y + 52),
+        radius=18,
+        fill=(32, 32, 38),
+        outline=theme["secondary"],
+        width=2,
+    )
+
+    draw.text((60, y), label, fill="white", font=small)
+    draw.text((390, y), str(value), fill=theme["secondary"], font=small)
+
+    y += 70
 
     draw.text((40,620), "Powered by DingerHQ", fill=(180,180,180), font=small)
 
