@@ -18,7 +18,7 @@ class Bot(discord.Client):
                 ch = await self.fetch_channel(int(CHANNEL_ID))
                 print(f"Channel: {ch}", flush=True)
 
-                await ch.send("✅ DingerHQ bot is online!")
+
 
             except Exception as e:
                 print(f"Failed to fetch channel: {e}", flush=True)
