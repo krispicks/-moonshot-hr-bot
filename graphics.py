@@ -26,7 +26,7 @@ def _headshot(player_id):
         r = requests.get(url, timeout=10)
         r.raise_for_status()
         img = Image.open(BytesIO(r.content)).convert("RGBA")
-        return img.resize((220,220))
+        return img.resize((320,320))
     except Exception:
         return None
 
@@ -55,16 +55,17 @@ def create_home_run_graphic(
     draw.rectangle((0,0,WIDTH,90), fill=theme["primary"])
 
     title = _font(54, True)
-    big = _font(48, True)
+    big = _font(62, True)
     normal = _font(34)
     small = _font(28)
 
-    draw.text((40,18), "ð DingerHQ LIVE", fill="white", font=title)
+    draw.text((40,18), "HOME RUN", fill="white", font=title)
+    draw.text((40,72), "DingerHQ LIVE", fill=(220,220,220), font=small)
 
     # headshot
     hs = _headshot(player_id)
     if hs:
-        image.paste(hs, (900,120), hs)
+        image.paste(hs, (820,160), hs)
 
     draw.text((50,120), player.upper(), fill=theme["secondary"], font=big)
     draw.text((50,180), team, fill="white", font=normal)
@@ -79,7 +80,13 @@ def create_home_run_graphic(
 
     y = 270
     for label, value in stats:
-        draw.rounded_rectangle((40,y-8,760,y+42), radius=12,
+        draw.rounded_rectangle(
+    (35, y-10, 780, y+52),
+    radius=18,
+    fill=(32,32,38),
+    outline=theme["secondary"],
+    width=2
+)
                                fill=(35,35,42))
         draw.text((60,y), label, fill="white", font=small)
         draw.text((390,y), str(value), fill=theme["secondary"], font=small)
