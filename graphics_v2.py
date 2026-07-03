@@ -1,5 +1,7 @@
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 import os
+import requests
+from io import BytesIO
 
 WIDTH = 1200
 HEIGHT = 675
@@ -9,14 +11,14 @@ def _font(size, bold=False):
     try:
         name = "DejaVuSans-Bold.ttf" if bold else "DejaVuSans.ttf"
         return ImageFont.truetype(name, size)
-    except:
+    except Exception:
         return ImageFont.load_default()
-def _stadium_background():
 
+
+def _stadium_background():
     stadium_dir = "assets/stadiums"
 
     if os.path.isdir(stadium_dir):
-
         files = [
             f for f in os.listdir(stadium_dir)
             if f.lower().endswith((".jpg", ".jpeg", ".png"))
@@ -31,9 +33,27 @@ def _stadium_background():
 
             return bg
 
-    return Image.new("RGB", (WIDTH, HEIGHT), (12,12,18))
+    return Image.new("RGB", (WIDTH, HEIGHT), (12, 12, 18))
 
-def create_home_run_graphic():
+
+def _headshot(player_id):
+    url = (
+        f"https://img.mlbstatic.com/mlb-photos/image/upload/"
+        f"w_600,q_auto:best/v1/people/{player_id}/headshot/67/current"
+    )
+
+    try:
+        r = requests.get(url, timeout=10)
+        r.raise_for_status()
+
+        img = Image.open(BytesIO(r.content)).convert("RGBA")
+        return img.resize((420, 420))
+
+    except Exception:
+        return None
+
+
+def create_home_run_graphic(player_id=None):
 
     image = _stadium_background()
 
@@ -44,7 +64,7 @@ def create_home_run_graphic():
     ).convert("RGB")
 
     draw = ImageDraw.Draw(image)
-    
+
     # ===========================
     # HEADER
     # ===========================
@@ -77,9 +97,33 @@ def create_home_run_graphic():
 
     title = _font(56, True)
     normal = _font(26)
+    home_run_font = _font(130, True)
 
     draw.text((25, 15), "DingerHQ LIVE", fill="white", font=title)
-    draw.text((960, 28), "Powered by DingerHQ", fill="white", font=normal)
+
+    draw.text(
+        (610, 135),
+        "HOME\nRUN",
+        fill=(245, 245, 245),
+        font=home_run_font,
+    )
+
+    draw.text(
+        (900, 28),
+        "Powered by DingerHQ",
+        fill="white",
+        font=normal,
+    )
+
+    # ===========================
+    # PLAYER HEADSHOT
+    # ===========================
+
+    if player_id:
+        headshot = _headshot(player_id)
+
+        if headshot:
+            image.paste(headshot, (20, 120), headshot)
 
     image.save("preview.png")
 
