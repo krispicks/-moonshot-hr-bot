@@ -8,7 +8,7 @@ except Exception:
     TEAM_THEMES = {}
 
 WIDTH = 1920
-HEIGHT = 1089
+HEIGHT = 1080
 
 def _stadium_background():
     stadium_dir = "assets/stadiums"
@@ -138,13 +138,26 @@ def create_home_run_graphic(
         image.convert("RGBA"),
         overlay
     ).convert("RGB")
-
     draw = ImageDraw.Draw(image)
+
+    # Premium Border
+    draw.rounded_rectangle(
+        (15, 15, WIDTH - 15, HEIGHT - 15),
+        radius=30,
+        outline=theme["primary"],
+        width=8,
+    )
+
+    draw.rounded_rectangle(
+        (28, 28, WIDTH - 28, HEIGHT - 28),
+        radius=24,
+        outline=(255, 255, 255),
+        width=2,
+    )
 
     # Header
     draw.rectangle((0, 0, WIDTH, 110), fill=(12, 12, 12))
     draw.line((0, 110, WIDTH, 110), fill=theme["primary"], width=5)
-
     title = _font(68, True)
     big = _font(62, True)
     normal = _font(34)
@@ -163,9 +176,9 @@ def create_home_run_graphic(
     logo = _team_logo(team)
 
     if logo:
-        logo = logo.resize((180,180))
+        logo = logo.resize((240,240))
         logo.putalpha(55)
-        image.paste(logo, (960, 20), logo)
+        image.paste(logo, (1630, 40), logo)
 
     # Player info
     name_font = _font(72, True)
