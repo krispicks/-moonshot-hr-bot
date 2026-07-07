@@ -6,6 +6,7 @@ import graphics
 
 startup_complete = False
 
+
 async def watch_home_runs(bot, channel):
     global startup_complete
 
@@ -33,9 +34,7 @@ async def watch_home_runs(bot, channel):
                     if cache.already_posted(game_pk, play_id):
                         continue
 
-                    # -----------------------------
-                    # STARTUP SYNC
-                    # -----------------------------
+                    # Startup Sync
                     if not startup_complete:
                         cache.mark_posted(game_pk, play_id)
                         print(
@@ -43,7 +42,6 @@ async def watch_home_runs(bot, channel):
                             flush=True,
                         )
                         continue
-                    # -----------------------------
 
                     cache.mark_posted(game_pk, play_id)
 
@@ -51,13 +49,18 @@ async def watch_home_runs(bot, channel):
 
                     updated_hr = hr
 
+                    # Wait up to 30 seconds for Statcast data
                     for _ in range(6):
                         await asyncio.sleep(5)
 
                         updated_home_runs = mlb.get_home_run_events(game_pk)
 
                         found = next(
-                            (x for x in updated_home_runs if x["play_id"] == play_id),
+                            (
+                                x
+                                for x in updated_home_runs
+                                if x["play_id"] == play_id
+                            ),
                             None,
                         )
 
@@ -76,23 +79,36 @@ async def watch_home_runs(bot, channel):
                         player=updated_hr["batter"],
                         player_id=updated_hr["player_id"],
                         team=updated_hr["team"],
+
+                        stadium=updated_hr["stadium"],
+                        pitcher=updated_hr["pitcher"],
+                        pitch_type=updated_hr["pitch_type"],
+                        pitch_speed=updated_hr["pitch_speed"],
+
                         distance=updated_hr["distance"],
                         exit_velocity=updated_hr["exit_velocity"],
                         launch_angle=updated_hr["launch_angle"],
+
                         inning=updated_hr["inning"],
                         half=updated_hr["half"],
+
                         away_score=updated_hr["away_score"],
                         home_score=updated_hr["home_score"],
                     )
 
-                    await channel.send(file=discord.File(filename))
+                    await channel.send(
+                        file=discord.File(filename)
+                    )
 
                     print(f"Posted: {game_pk}-{play_id}", flush=True)
 
-            # Startup scan finished
             if not startup_complete and game_ids:
                 startup_complete = True
-                print("✅ Startup sync complete. Watching for NEW home runs only.", flush=True)
+                print(
+                    "✅ Startup sync complete. Watching for NEW home runs only.",
+                    flush=True,
+                )
+
         except Exception as e:
             print(f"Error in watch_home_runs(): {e}", flush=True)
 
