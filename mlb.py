@@ -47,9 +47,10 @@ def get_home_run_events(game_pk):
             continue
 
         hit = play.get("hitData", {})
-        
+
         print("HIT DATA:", hit, flush=True)
 
+        # Batting team
         if play["about"]["halfInning"].lower() == "top":
             team = (
                 feed.get("gameData", {})
@@ -68,27 +69,68 @@ def get_home_run_events(game_pk):
         away_score = result.get("awayScore", 0)
         home_score = result.get("homeScore", 0)
 
+        # Stadium
+        stadium = (
+            feed.get("gameData", {})
+            .get("venue", {})
+            .get("name", "Unknown Stadium")
+        )
+
+        # Pitcher
+        pitcher = (
+            play.get("matchup", {})
+            .get("pitcher", {})
+            .get("fullName", "Unknown")
+        )
+
+        # Pitch Data
+        pitch_data = play.get("pitchData", {})
+
+        pitch_type = pitch_data.get(
+            "typeDescription",
+            "Unknown"
+        )
+
+        pitch_speed = pitch_data.get(
+            "startSpeed",
+            "N/A"
+        )
+
         events.append({
+
             "play_id": (
                 f"{play['matchup']['batter']['id']}_"
                 f"{play['about']['inning']}_"
                 f"{play['about']['halfInning']}_"
-                f"{result.get('awayScore', 0)}_"
-                f"{result.get('homeScore', 0)}"
+                f"{away_score}_"
+                f"{home_score}"
             ),
 
+            # Player
             "player_id": play["matchup"]["batter"]["id"],
             "batter": play["matchup"]["batter"]["fullName"],
             "team": team,
+
+            # Game
             "inning": play["about"]["inning"],
             "half": play["about"]["halfInning"],
+            "away_score": away_score,
+            "home_score": home_score,
 
+            # Stadium
+            "stadium": stadium,
+
+            # Pitcher
+            "pitcher": pitcher,
+
+            # Pitch Data
+            "pitch_type": pitch_type,
+            "pitch_speed": pitch_speed,
+
+            # Statcast
             "distance": hit.get("totalDistance", "N/A"),
             "exit_velocity": hit.get("launchSpeed", "N/A"),
             "launch_angle": hit.get("launchAngle", "N/A"),
-
-            "away_score": away_score,
-            "home_score": home_score,
         })
 
     return events
