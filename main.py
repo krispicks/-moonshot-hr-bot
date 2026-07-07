@@ -37,7 +37,7 @@ class Bot(discord.Client):
         print(f"Received message: {message.content}", flush=True)
 
         # Test command
-           print("TESTHR COMMAND RAN", flush=True)
+        if message.content == "!testhr":
 
             filename = graphics.create_home_run_graphic(
                 player="Aaron Judge",
