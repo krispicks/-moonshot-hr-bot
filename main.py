@@ -40,16 +40,20 @@ class Bot(discord.Client):
         if message.content == "!testhr":
 
             filename = graphics.create_home_run_graphic(
-                player="Aaron Judge",
-                player_id=592450,
-                team="New York Yankees",
-                distance=437,
-                exit_velocity=112.3,
-                launch_angle=28,
-                inning=4,
-                half="Top",
-                away_score=5,
-                home_score=2,
+                 player="Aaron Judge",
+                 player_id=592450,
+                 team="New York Yankees",
+                 stadium="Yankee Stadium",
+                 pitcher="Garrett Crochet",
+                 pitch_type="Four-Seam Fastball",
+                 pitch_speed=98.2,
+                 distance=437,
+                 exit_velocity=112.3,
+                 launch_angle=28,
+                 inning=4,
+                 half="Top",
+                 away_score=5,
+                 home_score=2,
             )
 
             await message.channel.send(file=discord.File(filename))
