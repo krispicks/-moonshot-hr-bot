@@ -169,8 +169,8 @@ def create_home_run_graphic(
     hs = _headshot(player_id)
 
     if hs:
-        hs = hs.resize((350, 350))
-        image.paste(hs, (40, 120), hs)
+        hs = hs.resize((600, 600))
+        image.paste(hs, (70, 180), hs)
 
     # Team logo
     logo = _team_logo(team)
@@ -232,18 +232,41 @@ def create_home_run_graphic(
         )
 
     draw.rounded_rectangle(
-        (420, 565, 1110, 635),
-        radius=18,
+        (760, 800, 1600, 900),
+        radius=25,
         fill=(20, 20, 25),
         outline=theme["primary"],
-        width=3,
+        width=5,
+   )
+    
+    draw.text(
+        (800, 835),
+        f"{away_score}   •   {half.upper()} {inning}   •   {home_score}",
+        fill="white",
+        font=_font(42, True),
+    )
+        
+    # Game Information Panel
+    draw.rounded_rectangle(
+        (760, 930, 1600, 1045),
+        radius=20,
+        fill=(20, 20, 25),
+        outline=theme["primary"],
+        width=5,
     )
 
     draw.text(
-        (450, 582),
-        f"{away_score}   •   {half.upper()} {inning}   •   {home_score}",
+        (790, 960),
+        "🏟 Stadium: Coming Soon",
         fill="white",
-        font=_font(32, True),
+        font=_font(28, True),
+    )
+
+    draw.text(
+        (790, 1000),
+        "⚾ Pitcher: Coming Soon",
+        fill="white",
+        font=_font(28, True),
     )
 
     draw.text(
