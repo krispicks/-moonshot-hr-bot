@@ -113,6 +113,10 @@ def create_home_run_graphic(
     player,
     player_id,
     team,
+    stadium,
+    pitcher,
+    pitch_type,
+    pitch_speed,
     distance,
     exit_velocity,
     launch_angle,
@@ -256,15 +260,24 @@ def create_home_run_graphic(
     )
 
     draw.text(
-        (790, 960),
-        "🏟 Stadium: Coming Soon",
+        (790, 950),
+        f"🏟 {stadium}",
         fill="white",
         font=_font(28, True),
+   
     )
 
     draw.text(
-        (790, 1000),
-        "⚾ Pitcher: Coming Soon",
+        (790, 985),
+        f"⚾ {pitcher}",
+        fill="white",
+        font=_font(28, True),
+  
+    )
+
+    draw.text(
+        (790, 1020),
+        f"🎯 {pitch_type} • {pitch_speed} MPH",
         fill="white",
         font=_font(28, True),
     )
