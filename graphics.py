@@ -181,11 +181,11 @@ def create_home_run_graphic(
         image.paste(logo, (1630, 40), logo)
 
     # Player info
-    name_font = _font(72, True)
-    team_font = _font(34)
+    name_font = _font(84, True)
+    team_font = _font(46)
 
     draw.text(
-         (430, 180),   # moved right
+         (760, 240),   # moved right
          player.upper(),
          fill=theme["secondary"],
          font=name_font,
@@ -193,7 +193,7 @@ def create_home_run_graphic(
     )
 
     draw.text(
-        (430, 235),   # moved right
+        (760, 325),   # moved right
         team,
         fill="white",
         font=team_font,
@@ -201,34 +201,34 @@ def create_home_run_graphic(
     )
 
     cards = [
-        ("DISTANCE", f"{distance} FT", 420, 290),
-        ("EXIT VELO", f"{exit_velocity} MPH", 700, 290),
-        ("LAUNCH", f"{launch_angle}°", 420, 430),
-        ("INNING", f"{half.upper()} {inning}", 700, 430),
+        ("💥 DISTANCE", f"{distance} FT", 760, 420),
+        ("⚡ EXIT VELO", f"{exit_velocity} MPH", 1120, 420),
+        ("📈 LAUNCH", f"{launch_angle}°", 760, 600),
+        ("🕒 INNING", f"{half.upper()} {inning}", 1120, 600),
+  
     ]
-
     for title, value, x, y in cards:
 
         draw.rounded_rectangle(
-            (x, y, x + 250, y + 110),
+            (x, y, x + 320, y + 140),
             radius=22,
             fill=(22, 22, 28),
             outline=theme["primary"],
-            width=3,
+            width=5,
         )
 
         draw.text(
             (x + 20, y + 18),
             title,
             fill=(160, 160, 160),
-            font=_font(22, True),
+            font=_font(28, True),
         )
 
         draw.text(
             (x + 20, y + 56),
             value,
             fill="white",
-            font=_font(36, True),
+            font=_font(46, True),
         )
 
     draw.rounded_rectangle(
