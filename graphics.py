@@ -7,8 +7,8 @@ try:
 except Exception:
     TEAM_THEMES = {}
 
-WIDTH = 1200
-HEIGHT = 675
+WIDTH = 1920
+HEIGHT = 1089
 
 def _stadium_background():
     stadium_dir = "assets/stadiums"
